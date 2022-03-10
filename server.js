@@ -70,6 +70,7 @@ app.get('/api/candidates/:id', (req, res) => {
 });
 
 // Delete a single candidate using express.js
+
 app.delete('/api/candidates/:id', (req,res) => {
     const sql = `DELETE FROM candidates WHERE id = ?`;
     const params = [req.params.id];
@@ -93,27 +94,28 @@ app.delete('/api/candidates/:id', (req,res) => {
 
 // Create candidate with express.js
 app.post('/api/candidate', ({ body }, res) => {
-    const error = inputCheck(body, 'first_name', 'last_name', 'industry_connected');
+    const errors = inputCheck(body, 'first_name', 'last_name', 'industry_connected');
     if (errors) {
         res.status(400).json({ error: errors });
         return;
     }
-});
-
-const sql = `INSERT INTO candidates (first_name, last_name, industry_connected)
-  VALUES (?,?,?)`;
-const params = [body.first_name, body.last_name, body.industry_connected];
+    const sql = `INSERT INTO candidates (first_name, last_name, industry_connected)
+                VALUES (?,?,?)`;
+    const params = [body.first_name, body.last_name, body.industry_connected];
 
 db.query(sql, params, (err, result) => {
-  if (err) {
+    if (err) {
     res.status(400).json({ error: err.message });
     return;
-  }
-  res.json({
+    }
+    res.json({
     message: 'success',
     data: body
-  });
+        });
+    });
 });
+
+
 
 
 // Create a candidate
